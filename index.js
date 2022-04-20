@@ -1,53 +1,75 @@
-const http = require('http')
-
 const express = require('express')
 const app = express()
-const hostname = '127.0.0.1'
-const port = 3000
+const port = process.env.PORT || 3000
+const bodyParser = require('body-parser')
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/plain')
-  res.end('Hello World\n')
+app.use(bodyParser.json())
+
+let database = []
+let id = 0
+
+app.all('*', (req, res, next) => {
+	const method = req.method
+	console.log(`method ${method} aangeroepen`)
+	next()
 })
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
+app.get('/', (req, res) => {
+  	res.status(200).json({
+		status: 200,
+		result: 'Hello world',
+  	})
 })
 
+app.post('/api/movie', (req, res) => {
+	let movie = req.body
+	console.log(movie)
+	movie = {
+		id,
+		...movie,
+	};
+	id++
 
+	database.push(movie);
+	console.log(database);
+	res.status(201).json({
+		status: 201,
+		result: movie
+	});
+});
 
-// app.METHOD(PATH, HANDLER);
+app.get('/api/movie', (req, res) => {
+	res.status(200).json({
+		status: 200,
+		result: database,
+	});
+});
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!')
-// })
+app.get('/api/movie/:movieId', (req, res) => {
+	const movieId = req.params.movieId;
+	let movie = database.filter((item) => (item.id == movieId));
+	if(movie.length > 0) {
+		console.log(movie);
+		res.status(200).json({
+			status: 200,
+			result: movie,
+		})
+	}else{
+		res.status(404).json({
+			status: 404,
+			result: `Movie with ID ${movieId} not found`,
+		})
+	}
+	
+})
 
-// app.post('/', (req, res) => {
-//   res.send('Got a POST request')
-// })
+app.all('*', (req, res) => {
+  	res.status(404).json({
+		status: 404,
+		result: 'end-point not found',
+  	})
+})
 
-// app.put('/user', (req, res) => {
-//   res.send('Got a PUT request at /user')
-// })
-
-// app.delete('/user', (req, res) => {
-//   res.send('Got a DELETE request at /user')
-// })
-
-// app.use((req, res, next) => {
-//   res.status(404).send("Sorry can't find that!")
-// })
-
-// app.use((req, res, next) => {
-//   res.status(404).send("Sorry can't find that!")
-// })
-
-// app.use((err, req, res, next) => {
-//   console.error(err.stack)
-//   res.status(500).send('Something broke!')
-// })
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })
+app.listen(port, () => {
+  	console.log(`Example app listening on port ${port}`)
+})
