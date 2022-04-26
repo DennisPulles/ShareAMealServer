@@ -17,11 +17,16 @@ let controller = {
             assert(typeof password === 'string', 'password must be a string!');
             next();
         }catch(error){
+            const err = {
+                status: 406,
+                result: error.message,
+            }
             console.log(error);
             res.status(406).json({
                 status: 406,
                 result: error.toString(),
             })
+            next(err);
         }
     },
 
@@ -67,7 +72,7 @@ let controller = {
         });
     },
 
-    getUserById:(req, res)=>{
+    getUserById:(req, res, next)=>{
         const userId = req.params.userId;
         let user = database.filter((item) => (item.id == userId));
         if(user.length > 0) {
@@ -77,10 +82,11 @@ let controller = {
                 result: user,
             })
         }else{
-            res.status(404).json({
+            const error={
                 status: 404,
                 result: `User with ID ${userId} not found`,
-            })
+            };
+            next(error);
         }
 
     },
