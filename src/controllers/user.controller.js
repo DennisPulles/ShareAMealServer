@@ -1,20 +1,41 @@
+const assert = require('assert');
+const { title } = require('process');
 
 let database = []
 let id = 0
 
 let controller = {
 
+    validateUser:(req, res, next)=>{
+        let user = req.body;
+        let{firstName, lastName, email, password} = user;
+
+        try{
+            assert(typeof firstName === 'string', 'firstName must be a string!');
+            assert(typeof lastName === 'string', 'lastName must be a string!');
+            assert(typeof email === 'string', 'email must be a string!');
+            assert(typeof password === 'string', 'password must be a string!');
+            next();
+        }catch(error){
+            console.log(error);
+            res.status(406).json({
+                status: 406,
+                result: error.toString(),
+            })
+        }
+    },
+
     addUser:(req, res)=>{
         let user = req.body;
         console.log(user);
-        let email = user.emailAdress;
+        let email = user.email;
         if (email == undefined) {
           res.status(400).json({
             status: 400,
             result: "No email inserted.",
           });
         } else {
-              let userArray = database.filter((item) => item.emailAdress == email);
+              let userArray = database.filter((item) => item.email == email);
               if (userArray.length > 0) {
                 res.status(401).json({
                     status: 401,
@@ -26,6 +47,9 @@ let controller = {
               ...user,
             };
             id++;
+
+
+
             database.push(user);
             console.log(database);
             res.status(201).json({
