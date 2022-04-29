@@ -22,10 +22,6 @@ let controller = {
                 result: error.message,
             }
             console.log(error);
-            res.status(406).json({
-                status: 406,
-                result: error.toString(),
-            })
             next(err);
         }
     },
