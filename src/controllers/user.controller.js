@@ -1,5 +1,6 @@
-const assert = require('assert');
-const { title } = require('process');
+const assert = require('assert')
+const { title } = require('process')
+const logger = require('../config/config').logger
 
 // let database = require('../../database/inmemdb')
 let database = []
@@ -23,14 +24,14 @@ let controller = {
                 status: 406,
                 result: error.message,
             }
-            console.log(error);
+            logger.error(error);
             next(err);
         }
     },
 
     addUser:(req, res)=>{
         let user = req.body;
-        console.log(user);
+        logger.info(user);
         let email = user.email;
         if (email == undefined) {
           res.status(400).json({
@@ -54,7 +55,7 @@ let controller = {
 
 
             database.push(user);
-            console.log(database);
+            logger.debug(database);
             res.status(201).json({
               status: 201,
               result: `User with email: ${email} was added.`,
@@ -76,7 +77,7 @@ let controller = {
               if (error) throw error;
            
               // Don't use the connection here, it has been returned to the dbconnection.
-              console.log('result = ', results)
+              logger.debug('result = ', results)
         
               res.status(200).json({
                   statusCode: 200,
@@ -90,7 +91,7 @@ let controller = {
         const userId = req.params.userId;
         let user = database.filter((item) => (item.id == userId));
         if(user.length > 0) {
-            console.log(user);
+            logger.debug(user);
             res.status(200).json({
                 status: 200,
                 result: user,
@@ -116,7 +117,7 @@ let controller = {
         const id = req.params.id;
         let userArray = database.filter((item) => item.id == id);
         if (userArray.length > 0) {
-            console.log(userArray);
+            logger.debug(userArray);
             let user = req.body;
             user = {
                 id,
@@ -139,7 +140,7 @@ let controller = {
         const userId = req.params.userId;
         let userArray = database.filter((item) => item.id == userId);
         if (userArray.length > 0) {
-            console.log(userArray);
+            logger.debug(userArray);
             database.splice(database.indexOf(userArray[0]), 1);
             res.status(201).json({
                 status: 201,

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const userRouter = require('./src/routes/user.routes');
+const authRouter = require('./src/routes/auth.routes');
 require('dotenv').config()
 
 const port = process.env.PORT;
@@ -15,6 +16,7 @@ app.all('*', (req, res, next) => {
 })
 
 app.use(userRouter);
+app.use(authRouter);
 
 app.all('*', (req, res) => {
   	res.status(404).json({

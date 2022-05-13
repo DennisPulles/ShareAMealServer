@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.post("/api/user", userController.validateUser, userController.addUser);
 
-router.get('/api/user', userController.getAllUsers); 
+router.get('/api/user', authController.validate, userController.getAllUsers); 
 
 router.get('/api/user/:userId', userController.getUserById);
 
