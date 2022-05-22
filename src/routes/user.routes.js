@@ -1,25 +1,25 @@
-const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/user.controller');
-
+const express = require('express')
+const router = express.Router()
+const userController = require('../controllers/user.controller')
+const authController = require('../controllers/authentication.controller')
 
 router.get('/', (req, res) => {
-    res.status(200).json({
-      status: 200,
-      result: 'Hello world',
-    })
+	res.status(200).json({
+		status: 200,
+		result: 'Hello World',
+	})
 })
 
-router.post("/api/user", userController.validateUser, userController.addUser);
+router.post('/api/user', userController.validateUser,	userController.addUser)
 
-router.get('/api/user', authController.validate, userController.getAllUsers); 
+router.get('/api/user/profile',	authController.validateToken,	userController.getUserProfileFromId)
 
-router.get('/api/user/:userId', userController.getUserById);
+router.get('/api/user/:userId',	authController.validateToken,	userController.getUserFromId)
 
-router.get("/api/user/profile", userController.registerProfile);
+router.get('/api/user', authController.validateToken, userController.getAllUsers)
 
-router.put("/api/user/:id", userController.updateUser);
+router.put('/api/user/:userId',	authController.validateToken,	userController.validateUpdateUser, userController.updateUserFromId)
 
-router.delete("/api/user/:userId", userController.deleteUser);
+router.delete('/api/user/:userId',	authController.validateToken,	authController.validateOwnershipUser,	userController.deleteUserFromId)
 
-module.exports = router;
+module.exports = router
