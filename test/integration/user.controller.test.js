@@ -39,8 +39,8 @@ const INSERT_MEAL = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHo
 const INSERT_MEAL2 = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (2, 0, 0, 0, 0, '2022-06-22 16:58:27', 7, 7.75, 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg', 2, 'Spaghetti Bolognese 2', 'Italiaanse hap van deegslierten en saus deel 2.')`
 
 describe('CRUD Users /api/user', () => {
-	describe('UC-201 Register New User', () => {
-		beforeEach((done) => {
+	beforeEach((done) => {
+		describe('UC-201 Register New User', () => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -193,8 +193,8 @@ describe('CRUD Users /api/user', () => {
 	})
 
 	describe('UC-202 User Overview /api/user', () => {
-		describe('UC-202-1 Show 0 users/api/user', () => {
-			beforeEach((done) => {
+		beforeEach((done) => {
+			describe('UC-202-1 Show 0 users/api/user', () => {
 				logger.debug('beforeEach called')
 				dbconnection.getConnection(function (err, connection) {
 					if (err) throw err
@@ -227,8 +227,8 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		describe('UC-202-2 Show 2 users/api/user', () => {
-			beforeEach((done) => {
+		beforeEach((done) => {
+			describe('UC-202-2 Show 2 users/api/user', () => {
 				logger.debug('beforeEach called')
 				dbconnection.getConnection(function (err, connection) {
 					if (err) throw err
@@ -286,8 +286,8 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		describe('UC-202 Remaining test cases users/api/user', () => {
-			beforeEach((done) => {
+		beforeEach((done) => {
+			describe('UC-202 Remaining test cases users/api/user', () => {
 				logger.debug('beforeEach called')
 				dbconnection.getConnection(function (err, connection) {
 					if (err) throw err
@@ -383,8 +383,8 @@ describe('CRUD Users /api/user', () => {
 		})
 	})
 
-	describe('UC-203 Get User Profile /api/user', () => {
-		beforeEach((done) => {
+	beforeEach((done) => {
+		describe('UC-203 Get User Profile /api/user', () => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -452,8 +452,8 @@ describe('CRUD Users /api/user', () => {
 		})
 	})
 
-	describe('UC-204 Get User Details /api/user/?:id', () => {
-		beforeEach((done) => {
+	beforeEach((done) => {
+		describe('UC-204 Get User Details /api/user/?:id', () => {
 			logger.debug('beforeEach called')
 			// maak de testdatabase leeg zodat we onze testen kunnen uitvoeren.
 			dbconnection.getConnection(function (err, connection) {
@@ -535,8 +535,8 @@ describe('CRUD Users /api/user', () => {
 		})
 	})
 
-	describe('UC-205 Edit User Details /api/user', () => {
-		beforeEach((done) => {
+	beforeEach((done) => {
+		describe('UC-205 Edit User Details /api/user', () => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -692,8 +692,8 @@ describe('CRUD Users /api/user', () => {
 		})
 	})
 
-	describe('UC-206 Delete User', () => {
-		beforeEach((done) => {
+	beforeEach((done) => {
+		describe('UC-206 Delete User', () => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
