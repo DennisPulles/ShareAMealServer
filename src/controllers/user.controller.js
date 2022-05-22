@@ -22,7 +22,7 @@ let controller = {
 			assert.match(
 				password,
 				/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
-				'Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit'
+				'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
 			)
 			assert(
 				typeof emailAdress === 'string',
