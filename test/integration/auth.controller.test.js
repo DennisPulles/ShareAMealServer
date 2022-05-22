@@ -33,9 +33,9 @@ const INSERT_MEAL = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHo
 const INSERT_MEAL2 = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (2, 0, 0, 0, 0, '2022-06-22 16:58:27', 7, 7.75, 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg', 2, 'Spaghetti Bolognese 2', 'Italiaanse hap van deegslierten en saus deel 2.')`
 
 describe('Login Functionality /auth/login', () => {
-	describe('UC-101 Request List of meals', () => {
-		beforeEach((done) => {
-			logger.debug('beforeEach called')
+	beforeEach((done) => {
+		logger.debug('beforeEach called')
+		describe('UC-101 Request List of meals', () => {
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
 				connection.query(
@@ -58,104 +58,105 @@ describe('Login Functionality /auth/login', () => {
 					}
 				)
 			})
-		})
 
-		it('TC 101-1 Required field missing', (done) => {
-			chai.request(server)
-				.post('/api/auth/login')
-				.send({
-					password: 'Password0!',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('Required field is missing')
-					done()
-				})
-		})
-
-		it('TC 101-2 Non valid ', (done) => {
-			chai.request(server)
-				.post('/api/auth/login')
-				.send({
-					emailAdress: "invalidEmail",
-					password: 'Password0!',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('Non valid email address')
-					done()
-				})
-		})
-
-		it('TC 101-3 Non valid password', (done) => {
-			chai.request(server)
-				.post('/api/auth/login')
-				.send({
-					emailAdress: 'name@email.nl',
-					password: "a",
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
-						)
-					done()
-				})
-		})
-
-		it('TC 101-4 User does not exist', (done) => {
-			chai.request(server)
-				.post('/api/auth/login')
-				.send({
-					emailAdress: 'fakeuser@hotmail.com',
-					password: 'Secrets0',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('User not found or password invalid')
-					done()
-				})
-		})
-
-		it('TC 101-5 User logged in succesfully', (done) => {
-			chai.request(server)
-				.post('/api/auth/login')
-				.send({
-					emailAdress: 'name@email.com',
-					password: 'Password1!',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						emailAdress: 'name@email.com',
-						firstName: 'first',
-						id: 1,
-						isActive: 1,
-						street: 'street',
-						city: 'city',
-						lastName: 'last',
-						token: result.token,
+			it('TC 101-1 Required field missing', (done) => {
+				chai.request(server)
+					.post('/api/auth/login')
+					.send({
+						password: 'Password0!',
 					})
-					done()
-				})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('Required field is missing')
+						done()
+					})
+			})
+
+			it('TC 101-2 Non valid ', (done) => {
+				chai.request(server)
+					.post('/api/auth/login')
+					.send({
+						emailAdress: "invalidEmail",
+						password: 'Password0!',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('Non valid email address')
+						done()
+					})
+			})
+
+			it('TC 101-3 Non valid password', (done) => {
+				chai.request(server)
+					.post('/api/auth/login')
+					.send({
+						emailAdress: 'name@email.nl',
+						password: "a",
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
+							)
+						done()
+					})
+			})
+
+			it('TC 101-4 User does not exist', (done) => {
+				chai.request(server)
+					.post('/api/auth/login')
+					.send({
+						emailAdress: 'fakeuser@hotmail.com',
+						password: 'Secrets0',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('User not found or password invalid')
+						done()
+					})
+			})
+
+			it('TC 101-5 User logged in succesfully', (done) => {
+				chai.request(server)
+					.post('/api/auth/login')
+					.send({
+						emailAdress: 'name@email.com',
+						password: 'Password1!',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							emailAdress: 'name@email.com',
+							firstName: 'first',
+							id: 1,
+							isActive: 1,
+							street: 'street',
+							city: 'city',
+							lastName: 'last',
+							token: result.token,
+						})
+						done()
+					})
+			})
+
 		})
 	})
 })
