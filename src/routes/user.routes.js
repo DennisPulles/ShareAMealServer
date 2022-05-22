@@ -10,16 +10,16 @@ router.get('/', (req, res) => {
 	})
 })
 
-router.post('/api/user', userController.validateUser,	userController.addUser)
+router.post('/api/user', userController.validateUser, userController.addUser)
 
-router.get('/api/user/profile',	authController.validateToken,	userController.getUserProfileFromId)
+router.get('/api/user/profile',	authController.validateToken, userController.getUserProfileFromId)
 
-router.get('/api/user/:userId',	authController.validateToken,	userController.getUserFromId)
+router.get('/api/user/:userId',	authController.validateToken, userController.getUserFromId)
 
 router.get('/api/user', authController.validateToken, userController.getAllUsers)
 
-router.put('/api/user/:userId',	authController.validateToken,	userController.validateUpdateUser, userController.updateUserFromId)
+router.put('/api/user/:userId',	authController.validateToken, userController.validateUpdateUser, userController.updateUserFromId)
 
-router.delete('/api/user/:userId',	authController.validateToken,	authController.validateOwnershipUser,	userController.deleteUserFromId)
+router.delete('/api/user/:userId',	authController.validateToken, authController.validateOwnershipUser,	userController.deleteUserFromId)
 
 module.exports = router
