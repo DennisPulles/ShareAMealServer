@@ -33,9 +33,9 @@ const INSERT_MEAL = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHo
 const INSERT_MEAL2 = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (2, 0, 0, 0, 0, '2022-06-22 16:58:27', 7, 7.75, 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg', 2, 'Spaghetti Bolognese 2', 'Italiaanse hap van deegslierten en saus deel 2.')`
 
 describe('Login Functionality /auth/login', () => {
-	beforeEach((done) => {
-		logger.debug('beforeEach called')
-		describe('UC-101 Request List of meals', () => {
+	describe('UC-101 Request List of meals', () => {
+		beforeEach((done) => {
+			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
 				connection.query(
@@ -58,6 +58,7 @@ describe('Login Functionality /auth/login', () => {
 					}
 				)
 			})
+		})
 
 		it('TC 101-1 Required field missing', (done) => {
 			chai.request(server)
@@ -156,8 +157,5 @@ describe('Login Functionality /auth/login', () => {
 					done()
 				})
 		})
-
-		
-	})
 	})
 })
