@@ -34,8 +34,8 @@ const INSERT_MEAL2 = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeH
 
 describe('Login Functionality /auth/login', () => {
 	beforeEach((done) => {
+		logger.debug('beforeEach called')
 		describe('UC-101 Request List of meals', () => {
-			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
 				connection.query(
@@ -58,7 +58,6 @@ describe('Login Functionality /auth/login', () => {
 					}
 				)
 			})
-		})
 
 		it('TC 101-1 Required field missing', (done) => {
 			chai.request(server)
@@ -157,5 +156,8 @@ describe('Login Functionality /auth/login', () => {
 					done()
 				})
 		})
+
+		
+	})
 	})
 })
