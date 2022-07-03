@@ -70,11 +70,11 @@ let controller = {
 			city,
 		} = user
 		try {
-			// assert.match(
-			// 	password,
-			// 	/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/,
-			// 	'Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit'
-			// )
+			assert.match(
+				password,
+				/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/,
+				'Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit'
+			)
 			assert(
 				typeof emailAdress === 'string',
 				'emailAdress cannot be null!'
@@ -106,7 +106,7 @@ let controller = {
 			next(error)
 		}
 	},
-	// UC-201
+	// UC-201 Register a new user
 	addUser: (req, res) => {
 		let user = req.body
 		dbconnection.getConnection(function (error, connection) {
@@ -148,7 +148,7 @@ let controller = {
 			)
 		})
 	},
-	// UC-202
+	// UC-202 get all users
 	getAllUsers: (req, res, next) => {
 		// Get params
 		let query = req.query

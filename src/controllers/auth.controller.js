@@ -8,6 +8,7 @@ const logger = require('../config/config').logger
 const jwtSecretKey = require('../config/config').jwtSecretKey
 
 module.exports = {
+	//UC-101 login
 	login(req, res, next) {
 		dbconnection.getConnection((err, connection) => {
 			if (err) {
