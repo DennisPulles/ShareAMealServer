@@ -21,12 +21,12 @@ let controller = {
 		try {
 			assert.match(
 				password,
-				/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 				'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
 			)
 			assert(
 				typeof emailAdress === 'string',
-				'emailAdress cannot be null!'
+				'emailAdress cannot be null!' 
 			)
 			assert.match(
 				emailAdress,
@@ -70,11 +70,11 @@ let controller = {
 			city,
 		} = user
 		try {
-			assert.match(
-				password,
-				/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/,
-				'Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit'
-			)
+			// assert.match(
+			// 	password,
+			// 	/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/,
+			// 	'Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit'
+			// )
 			assert(
 				typeof emailAdress === 'string',
 				'emailAdress cannot be null!'
