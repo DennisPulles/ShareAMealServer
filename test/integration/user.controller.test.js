@@ -61,134 +61,144 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		it('TC-201-1 Required field is missing /api/user', (done) => {
-			chai.request(server)
-				.post('/api/user')
-				.send({
-					lastName: 'Pulles',
-					street: 'Leerlooierstraat 7',
-					city: 'Breda',
-					password: 'Wachtwoord0!',
-					emailAdress: 'dennispulles@hotmail.com',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('First Name cannot be null!')
-					done()
-				})
-		})
-
-		it('TC 201-2 Non-valid emailAdress /api/user', (done) => {
-			chai.request(server)
-				.post('/api/user')
-				.send({
-					firstName: 'Dennis',
-					lastName: 'Pulles',
-					street: 'Leerlooierstraat 7',
-					city: 'Breda',
-					password: 'Wachtwoord0!',
-					emailAdress: 'dennispulleshotmail.com',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('Invalid emailadres !')
-					done()
-				})
-		})
-
-		it('TC 201-3 Non-valid password /api/user', (done) => {
-			chai.request(server)
-				.post('/api/user')
-				.send({
-					firstName: 'Dennis',
-					lastName: 'Pulles',
-					street: 'Leerlooierstraat 7',
-					city: 'Breda',
-					phoneNumber: '0123456789',
-					password: 123,
-					emailAdress: 'dennispulles@hotmail.com',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
-						)
-					done()
-				})
-		})
-
-		it('TC 201-4 User already exists /api/user', (done) => {
-			chai.request(server)
-				.post('/api/user')
-				.send({
-					firstName: 'first',
-					lastName: 'last',
-					isActive: 1,
-					emailAdress: 'name@email.com',
-					password: 'Wachtwoord0',
-					phoneNumber: '0123456789',
-					roles: 'editor,guest',
-					street: 'street',
-					city: 'city',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(409)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'Email-address: name@email.com has already been taken!'
-						)
-					done()
-				})
-		})
-
-		it('TC 201-5 User added succesfully /api/user', (done) => {
-			chai.request(server)
-				.post('/api/user')
-				.send({
-					firstName: 'Dennis',
-					lastName: 'Pulles',
-					isActive: 1,
-					emailAdress: 'dennispulles@hotmail.com',
-					password: 'Password0!',
-					phoneNumber: '0640511370',
-					roles: 'editor,guest',
-					street: 'Leerlooierstraat 7',
-					city: 'Breda',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(201)
-					assert.deepEqual(result, {
-						id: 2,
-                        firstName: 'Dennis',
-                        lastName: 'Pulles',
-                        isActive: 1,
-                        emailAdress: 'dennispulles@hotmail.com',
-                        password: 'Password0!',
-                        phoneNumber: '0640511370',
-                        roles: 'editor,guest',
-                        street: 'Leerlooierstraat 7',
-                        city: 'Breda',
+		beforeEach((done) => {
+			it('TC-201-1 Required field is missing /api/user', (done) => {
+				chai.request(server)
+					.post('/api/user')
+					.send({
+						lastName: 'Pulles',
+						street: 'Leerlooierstraat 7',
+						city: 'Breda',
+						password: 'Wachtwoord0!',
+						emailAdress: 'dennispulles@hotmail.com',
 					})
-					logger.debug(result)
-					done()
-				})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('First Name cannot be null!')
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC 201-2 Non-valid emailAdress /api/user', (done) => {
+				chai.request(server)
+					.post('/api/user')
+					.send({
+						firstName: 'Dennis',
+						lastName: 'Pulles',
+						street: 'Leerlooierstraat 7',
+						city: 'Breda',
+						password: 'Wachtwoord0!',
+						emailAdress: 'dennispulleshotmail.com',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('Invalid emailadres !')
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC 201-3 Non-valid password /api/user', (done) => {
+				chai.request(server)
+					.post('/api/user')
+					.send({
+						firstName: 'Dennis',
+						lastName: 'Pulles',
+						street: 'Leerlooierstraat 7',
+						city: 'Breda',
+						phoneNumber: '0123456789',
+						password: 123,
+						emailAdress: 'dennispulles@hotmail.com',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
+							)
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC 201-4 User already exists /api/user', (done) => {
+				chai.request(server)
+					.post('/api/user')
+					.send({
+						firstName: 'first',
+						lastName: 'last',
+						isActive: 1,
+						emailAdress: 'name@email.com',
+						password: 'Wachtwoord0',
+						phoneNumber: '0123456789',
+						roles: 'editor,guest',
+						street: 'street',
+						city: 'city',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(409)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'Email-address: name@email.com has already been taken!'
+							)
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC 201-5 User added succesfully /api/user', (done) => {
+				chai.request(server)
+					.post('/api/user')
+					.send({
+						firstName: 'Dennis',
+						lastName: 'Pulles',
+						isActive: 1,
+						emailAdress: 'dennispulles@hotmail.com',
+						password: 'Password0!',
+						phoneNumber: '0640511370',
+						roles: 'editor,guest',
+						street: 'Leerlooierstraat 7',
+						city: 'Breda',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(201)
+						assert.deepEqual(result, {
+							id: 2,
+							firstName: 'Dennis',
+							lastName: 'Pulles',
+							isActive: 1,
+							emailAdress: 'dennispulles@hotmail.com',
+							password: 'Password0!',
+							phoneNumber: '0640511370',
+							roles: 'editor,guest',
+							street: 'Leerlooierstraat 7',
+							city: 'Breda',
+						})
+						logger.debug(result)
+						done()
+					})
+			})
 		})
 	})
 
@@ -210,20 +220,22 @@ describe('CRUD Users /api/user', () => {
 				})
 			})
 
-			it('TC-202-2 Show 2 users /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						assert.deepEqual(result, [])
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-2 Show 2 users /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							assert.deepEqual(result, [])
+							done()
+						})
+				})
 			})
 		})
 
@@ -244,45 +256,47 @@ describe('CRUD Users /api/user', () => {
 				})
 			})
 
-			it('TC-202-2 Show 2 users /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						assert.deepEqual(result, [
-							{
-								id: 1,
-								firstName: 'First',
-								lastName: 'Last',
-								isActive: 1,
-								emailAdress: 'name@email.com',
-								password: 'Wachtwoord1!',
-								phoneNumber: '0123456789',
-								roles: 'editor,guest',
-								street: 'street',
-								city: 'city',
-							},
-							{
-								id: 2,
-								firstName: 'First2',
-								lastName: 'Last2',
-								isActive: 1,
-								emailAdress: 'name@emailtwo.com',
-								password: 'Password1!',
-								phoneNumber: '0123456789',
-								roles: 'editor,guest',
-								street: 'streettwo',
-								city: 'citytwo',
-							},
-						])
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-2 Show 2 users /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							assert.deepEqual(result, [
+								{
+									id: 1,
+									firstName: 'First',
+									lastName: 'Last',
+									isActive: 1,
+									emailAdress: 'name@email.com',
+									password: 'Wachtwoord1!',
+									phoneNumber: '0123456789',
+									roles: 'editor,guest',
+									street: 'street',
+									city: 'city',
+								},
+								{
+									id: 2,
+									firstName: 'First2',
+									lastName: 'Last2',
+									isActive: 1,
+									emailAdress: 'name@emailtwo.com',
+									password: 'Password1!',
+									phoneNumber: '0123456789',
+									roles: 'editor,guest',
+									street: 'streettwo',
+									city: 'citytwo',
+								},
+							])
+							done()
+						})
+				})
 			})
 		})
 
@@ -317,68 +331,76 @@ describe('CRUD Users /api/user', () => {
 				})
 			})
 
-			it('TC-202-3 Show users for non-existing name /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user?firstName=dfghjkiuytf')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						result.should.be.an('array').that.lengthOf(0)
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-3 Show users for non-existing name /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user?firstName=dfghjkiuytf')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							result.should.be.an('array').that.lengthOf(0)
+							done()
+						})
+				})
 			})
 
-			it('TC-202-4 Show users for isActive=false /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user?isActive=false')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						result.should.be.an('array').that.lengthOf(2)
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-4 Show users for isActive=false /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user?isActive=false')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							result.should.be.an('array').that.lengthOf(2)
+							done()
+						})
+				})
 			})
 
-			it('TC-202-5 Show users for isActive=true /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user?isActive=true')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						result.should.be.an('array').that.lengthOf(2)
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-5 Show users for isActive=true /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user?isActive=true')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							result.should.be.an('array').that.lengthOf(2)
+							done()
+						})
+				})
 			})
 
-			it('TC-202-6 Show users for name=first /api/user', (done) => {
-				chai.request(server)
-					.get('/api/user?firstName=first')
-					.set(
-						'authorization',
-						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-					)
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						result.should.be.an('array').that.lengthOf(1)
-						done()
-					})
+			beforeEach((done) => {
+				it('TC-202-6 Show users for name=first /api/user', (done) => {
+					chai.request(server)
+						.get('/api/user?firstName=first')
+						.set(
+							'authorization',
+							'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+						)
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							result.should.be.an('array').that.lengthOf(1)
+							done()
+						})
+				})
 			})
 		})
 	})
@@ -410,45 +432,49 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		it('TC-203-1 Invalid token /api/user/profile', (done) => {
-			chai.request(server)
-				.get('/api/user/profile')
-				.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be.a('string').that.equals('Not authorized')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-203-1 Invalid token /api/user/profile', (done) => {
+				chai.request(server)
+					.get('/api/user/profile')
+					.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be.a('string').that.equals('Not authorized')
+						done()
+					})
+			})
 		})
 
-		it('TC-203-2 Valid token and valid profile /api/user/profile', (done) => {
-			chai.request(server)
-				.get('/api/user/profile')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						city: 'Breda',
-						emailAdress: 'name@email.nl',
-						lastName: 'last',
-						id: 1,
-						firstName: 'first',
-						isActive: 1,
-						phoneNumber: '0123456789',
-						password: 'Password1!',
-						roles: 'editor,guest',
-						street: 'street',
+		beforeEach((done) => {
+			it('TC-203-2 Valid token and valid profile /api/user/profile', (done) => {
+				chai.request(server)
+					.get('/api/user/profile')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							city: 'Breda',
+							emailAdress: 'name@email.nl',
+							lastName: 'last',
+							id: 1,
+							firstName: 'first',
+							isActive: 1,
+							phoneNumber: '0123456789',
+							password: 'Password1!',
+							roles: 'editor,guest',
+							street: 'street',
+						})
+						done()
 					})
-					done()
-				})
+			})
 		})
 	})
 
@@ -476,62 +502,68 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		it('TC-204-1 Invalid token /api/user', (done) => {
-			chai.request(server)
-				.get('/api/user/1')
-				.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be.a('string').that.equals('Not authorized')
-					done()
-				})
-		})
-
-		it('TC-204-2 Invalid userId /api/user', (done) => {
-			chai.request(server)
-				.get('/api/user/2')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('User with ID 2 not found')
-					done()
-				})
-		})
-
-		it('TC-204-3 Valid userId, get one user back /api/user', (done) => {
-			chai.request(server)
-				.get('/api/user/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						id: 1,
-						firstName: 'first',
-						lastName: 'last',
-						isActive: 1,
-						emailAdress: 'name@email.nl',
-						password: 'Password1!',
-						phoneNumber: '0123456789',
-						roles: 'editor,guest',
-						street: 'street',
-						city: 'city',
+		beforeEach((done) => {
+			it('TC-204-1 Invalid token /api/user', (done) => {
+				chai.request(server)
+					.get('/api/user/1')
+					.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be.a('string').that.equals('Not authorized')
+						done()
 					})
-					done()
-				})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC-204-2 Invalid userId /api/user', (done) => {
+				chai.request(server)
+					.get('/api/user/2')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('User with ID 2 not found')
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC-204-3 Valid userId, get one user back /api/user', (done) => {
+				chai.request(server)
+					.get('/api/user/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							id: 1,
+							firstName: 'first',
+							lastName: 'last',
+							isActive: 1,
+							emailAdress: 'name@email.nl',
+							password: 'Password1!',
+							phoneNumber: '0123456789',
+							roles: 'editor,guest',
+							street: 'street',
+							city: 'city',
+						})
+						done()
+					})
+			})
 		})
 	})
 
@@ -552,143 +584,153 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		it('TC-205-1 Email missing /api/user', (done) => {
-			chai.request(server)
-				.put('/api/user/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					firstName: 'first',
-					lastName: 'last',
-					isActive: 1,
-					password: 'Password1!',
-					phoneNumber: '0123456789',
-					roles: 'editor,guest',
-					street: 'street',
-					city: 'city',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('emailAdress cannot be null!')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-205-1 Email missing /api/user', (done) => {
+				chai.request(server)
+					.put('/api/user/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						firstName: 'first',
+						lastName: 'last',
+						isActive: 1,
+						password: 'Password1!',
+						phoneNumber: '0123456789',
+						roles: 'editor,guest',
+						street: 'street',
+						city: 'city',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('emailAdress cannot be null!')
+						done()
+					})
+			})
 		})
 
-		it('TC-205-3 Invalid phoneNumber /api/user', (done) => {
-			chai.request(server)
-				.put('/api/user/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					firstName: 'first',
-					lastName: 'last',
-					isActive: 1,
-					emailAdress: 'name@email.com',
-					password: 'Password1!',
-					phoneNumber: '123',
-					roles: 'editor,guest',
-					street: 'street',
-					city: 'city',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('Phonenumber must have 10 digits')
-					done()
-				})
-		})
-
-		it('TC-205-4 User does not exist /api/user', (done) => {
-			chai.request(server)
-				.put('/api/user/2')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					firstName: 'first',
-					lastName: 'last',
-					isActive: 1,
-					emailAdress: 'name@email.com',
-					password: 'Password0!',
-					phoneNumber: '0123456789',
-					roles: 'editor,guest',
-					street: 'street',
-					city: 'city',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'Update failed, user with ID 2 does not exist'
-						)
-					done()
-				})
-		})
-
-		it('TC-205-5 User not signed in /api/user', (done) => {
-			chai.request(server)
-				.put('/api/user/1')
-				.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be.a('string').that.equals('Not authorized')
-					done()
-				})
-		})
-
-		it('TC-205-6 User succesfully edited /api/user', (done) => {
-			chai.request(server)
-				.put('/api/user/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					firstName: 'first',
-					lastName: 'last',
-					isActive: 1,
-					emailAdress: 'name@email.com',
-					password: 'Password1!',
-					phoneNumber: '0123456789',
-					roles: 'editor,guest',
-					street: 'street',
-					city: 'city',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						id: 1,
-						firstName: 'first1',
-						lastName: 'last1',
+		beforeEach((done) => {
+			it('TC-205-3 Invalid phoneNumber /api/user', (done) => {
+				chai.request(server)
+					.put('/api/user/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						firstName: 'first',
+						lastName: 'last',
 						isActive: 1,
 						emailAdress: 'name@email.com',
-						password: 'Password2!',
-						phoneNumber: '1123456789',
+						password: 'Password1!',
+						phoneNumber: '123',
 						roles: 'editor,guest',
-						street: 'street1',
-						city: 'city1',
+						street: 'street',
+						city: 'city',
 					})
-					done()
-				})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('Phonenumber must have 10 digits')
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC-205-4 User does not exist /api/user', (done) => {
+				chai.request(server)
+					.put('/api/user/2')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						firstName: 'first',
+						lastName: 'last',
+						isActive: 1,
+						emailAdress: 'name@email.com',
+						password: 'Password0!',
+						phoneNumber: '0123456789',
+						roles: 'editor,guest',
+						street: 'street',
+						city: 'city',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'Update failed, user with ID 2 does not exist'
+							)
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC-205-5 User not signed in /api/user', (done) => {
+				chai.request(server)
+					.put('/api/user/1')
+					.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be.a('string').that.equals('Not authorized')
+						done()
+					})
+			})
+		})
+
+		beforeEach((done) => {
+			it('TC-205-6 User succesfully edited /api/user', (done) => {
+				chai.request(server)
+					.put('/api/user/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						firstName: 'first',
+						lastName: 'last',
+						isActive: 1,
+						emailAdress: 'name@email.com',
+						password: 'Password1!',
+						phoneNumber: '0123456789',
+						roles: 'editor,guest',
+						street: 'street',
+						city: 'city',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							id: 1,
+							firstName: 'first1',
+							lastName: 'last1',
+							isActive: 1,
+							emailAdress: 'name@email.com',
+							password: 'Password2!',
+							phoneNumber: '1123456789',
+							roles: 'editor,guest',
+							street: 'street1',
+							city: 'city1',
+						})
+						done()
+					})
+			})
 		})
 	})
 
@@ -717,71 +759,79 @@ describe('CRUD Users /api/user', () => {
 			})
 		})
 
-		it('TC-206-1 User does not exist /api/user', (done) => {
-			chai.request(server)
-				.delete('/api/user/999')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 3 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals('User does not exist')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-206-1 User does not exist /api/user', (done) => {
+				chai.request(server)
+					.delete('/api/user/999')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 3 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals('User does not exist')
+						done()
+					})
+			})
 		})
 
-		it('TC-206-2 Not logged in /api/user', (done) => {
-			chai.request(server)
-				.delete('/api/user/1')
-				.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be.a('string').that.equals('Not authorized')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-206-2 Not logged in /api/user', (done) => {
+				chai.request(server)
+					.delete('/api/user/1')
+					.set('authorization', 'Bearer ' + jwt.sign({ userId: 1 }, 'a'))
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be.a('string').that.equals('Not authorized')
+						done()
+					})
+			})
 		})
 
-		it('TC-206-3 Actor is not owner /api/user', (done) => {
-			chai.request(server)
-				.delete('/api/user/3')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(403)
-					message.should.be
-						.a('string')
-						.that.equals('User is not the owner')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-206-3 Actor is not owner /api/user', (done) => {
+				chai.request(server)
+					.delete('/api/user/3')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(403)
+						message.should.be
+							.a('string')
+							.that.equals('User is not the owner')
+						done()
+					})
+			})
 		})
 
-		it('TC-206-4 User deleted succesfully /api/user', (done) => {
-			chai.request(server)
-				.delete('/api/user/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(200)
-					message.should.be
-						.a('string')
-						.that.equals('User with ID 1 deleted successfuly!')
-					done()
-				})
+		beforeEach((done) => {
+			it('TC-206-4 User deleted succesfully /api/user', (done) => {
+				chai.request(server)
+					.delete('/api/user/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(200)
+						message.should.be
+							.a('string')
+							.that.equals('User with ID 1 deleted successfuly!')
+						done()
+					})
+			})
 		})
 	})
 })
