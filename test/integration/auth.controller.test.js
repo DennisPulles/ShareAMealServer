@@ -59,104 +59,118 @@ describe('Login Functionality /auth/login', () => {
 				)
 			})
 
-			it('TC 101-1 Required field missing', (done) => {
-				chai.request(server)
-					.post('/api/auth/login')
-					.send({
-						password: 'Password0!',
-					})
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, message } = res.body
-						status.should.equals(400)
-						message.should.be
-							.a('string')
-							.that.equals('Required field is missing')
-						done()
-					})
-			})
-
-			it('TC 101-2 Non valid ', (done) => {
-				chai.request(server)
-					.post('/api/auth/login')
-					.send({
-						emailAdress: "invalidEmail",
-						password: 'Password0!',
-					})
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, message } = res.body
-						status.should.equals(400)
-						message.should.be
-							.a('string')
-							.that.equals('Non valid email address')
-						done()
-					})
-			})
-
-			it('TC 101-3 Non valid password', (done) => {
-				chai.request(server)
-					.post('/api/auth/login')
-					.send({
-						emailAdress: 'name@email.nl',
-						password: "a",
-					})
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, message } = res.body
-						status.should.equals(400)
-						message.should.be
-							.a('string')
-							.that.equals(
-								'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
-							)
-						done()
-					})
-			})
-
-			it('TC 101-4 User does not exist', (done) => {
-				chai.request(server)
-					.post('/api/auth/login')
-					.send({
-						emailAdress: 'fakeuser@hotmail.com',
-						password: 'Secrets0',
-					})
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, message } = res.body
-						status.should.equals(404)
-						message.should.be
-							.a('string')
-							.that.equals('User not found or password invalid')
-						done()
-					})
-			})
-
-			it('TC 101-5 User logged in succesfully', (done) => {
-				chai.request(server)
-					.post('/api/auth/login')
-					.send({
-						emailAdress: 'name@email.com',
-						password: 'Password1!',
-					})
-					.end((err, res) => {
-						res.should.be.an('object')
-						let { status, result } = res.body
-						status.should.equals(200)
-						assert.deepEqual(result, {
-							emailAdress: 'name@email.com',
-							firstName: 'first',
-							id: 1,
-							isActive: 1,
-							street: 'street',
-							city: 'city',
-							lastName: 'last',
-							token: result.token,
+			
+			beforeEach((done) => {
+				it('TC 101-1 Required field missing', (done) => {
+					chai.request(server)
+						.post('/api/auth/login')
+						.send({
+							password: 'Password0!',
 						})
-						done()
-					})
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, message } = res.body
+							status.should.equals(400)
+							message.should.be
+								.a('string')
+								.that.equals('Required field is missing')
+							done()
+						})
+				})
 			})
 
+			
+			beforeEach((done) => {
+				it('TC 101-2 Non valid ', (done) => {
+					chai.request(server)
+						.post('/api/auth/login')
+						.send({
+							emailAdress: "invalidEmail",
+							password: 'Password0!',
+						})
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, message } = res.body
+							status.should.equals(400)
+							message.should.be
+								.a('string')
+								.that.equals('Non valid email address')
+							done()
+						})
+				})
+			})
+
+			
+			beforeEach((done) => {
+				it('TC 101-3 Non valid password', (done) => {
+					chai.request(server)
+						.post('/api/auth/login')
+						.send({
+							emailAdress: 'name@email.nl',
+							password: "a",
+						})
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, message } = res.body
+							status.should.equals(400)
+							message.should.be
+								.a('string')
+								.that.equals(
+									'Password must contain atleast 8 characters which contains at least one lower- and uppercase letter,one number, and one special character'
+								)
+							done()
+						})
+				})
+			})
+
+			
+			beforeEach((done) => {
+				it('TC 101-4 User does not exist', (done) => {
+					chai.request(server)
+						.post('/api/auth/login')
+						.send({
+							emailAdress: 'fakeuser@hotmail.com',
+							password: 'Secrets0',
+						})
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, message } = res.body
+							status.should.equals(404)
+							message.should.be
+								.a('string')
+								.that.equals('User not found or password invalid')
+							done()
+						})
+				})
+			})
+
+			
+			beforeEach((done) => {
+				it('TC 101-5 User logged in succesfully', (done) => {
+					chai.request(server)
+						.post('/api/auth/login')
+						.send({
+							emailAdress: 'name@email.com',
+							password: 'Password1!',
+						})
+						.end((err, res) => {
+							res.should.be.an('object')
+							let { status, result } = res.body
+							status.should.equals(200)
+							assert.deepEqual(result, {
+								emailAdress: 'name@email.com',
+								firstName: 'first',
+								id: 1,
+								isActive: 1,
+								street: 'street',
+								city: 'city',
+								lastName: 'last',
+								token: result.token,
+							})
+							done()
+						})
+				})
+			})
 		})
 	})
 })
