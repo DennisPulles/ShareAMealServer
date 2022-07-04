@@ -196,148 +196,163 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-302-1 Required field missing', (done) => {
-			chai.request(server)
-				.put('/api/meal/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					price: 55.55,
-					name: 'Lekker smikkelen',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(400)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'maxAmountofParticipants should be a number'
-						)
-					done()
-				})
-		})
-
-		it('TC-302-2 Not logged in', (done) => {
-			chai.request(server)
-				.put('/api/meal/1')
-				.send({
-					maxAmountOfParticipants: 3,
-					price: 55.55,
-					name: 'Lekker smikkelen',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be
-						.a('string')
-						.that.equals('Authorization header missing!')
-					done()
-				})
-		})
-
-		it('TC-302-3 Not the meal owner', (done) => {
-			chai.request(server)
-				.put('/api/meal/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-				)
-				.send({
-					maxAmountOfParticipants: 3,
-					price: 5.50,
-					name: 'Lekker smikkelen',
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(403)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'User is not the owner of the meal'
-						)
-					done()
-				})
-		})
-
-		it('TC-302-4 Meal does not exist', (done) => {
-			chai.request(server)
-				.put('/api/meal/999')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					name: 'Eten',
-					description: 'Een heel groot bord eten',
-					isActive: 1,
-					isVega: 0,
-					isVegan: 0,
-					isToTakeHome: 1,
-					dateTime: '2022-05-20T12:10:15.000Z',
-					imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
-					allergenes: ['noten'],
-					maxAmountOfParticipants: 1,
-					price: 5.50,
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('Meal with ID 999 not found')
-					done()
-				})
-		})
-
-		it('TC-302-5 Meal updated succesfully', (done) => {
-			chai.request(server)
-				.put('/api/meal/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.send({
-					name: 'Eten',
-					description: 'Een heel groot bord eten',
-					isActive: 1,
-					isVega: 0,
-					isVegan: 0,
-					isToTakeHome: 1,
-					dateTime: '2022-05-20T12:10:15.000Z',
-					imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
-					allergenes: ['noten'],
-					maxAmountOfParticipants: 1,
-					price: 5.50,
-				})
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						allergenes: 'noten',
-						cookId: 1,
-						createDate: result.createDate,
-						dateTime: result.dateTime,
-						description: 'Een heel groot bord eten',
-						id: 1,
-						imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
-						isActive: true,
-						isToTakeHome: true,
-						isVega: false,
-						isVegan: false,
-						maxAmountOfParticipants: 1,
-						name: 'Eten',
-						price: 5.50,
-						updateDate: result.updateDate,
+		
+		beforeEach((done) => {
+			it('TC-302-1 Required field missing', (done) => {
+				chai.request(server)
+					.put('/api/meal/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						price: 55.55,
+						name: 'Lekker smikkelen',
 					})
-					done()
-				})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(400)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'maxAmountofParticipants should be a number'
+							)
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-302-2 Not logged in', (done) => {
+				chai.request(server)
+					.put('/api/meal/1')
+					.send({
+						maxAmountOfParticipants: 3,
+						price: 55.55,
+						name: 'Lekker smikkelen',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be
+							.a('string')
+							.that.equals('Authorization header missing!')
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-302-3 Not the meal owner', (done) => {
+				chai.request(server)
+					.put('/api/meal/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+					)
+					.send({
+						maxAmountOfParticipants: 3,
+						price: 5.50,
+						name: 'Lekker smikkelen',
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(403)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'User is not the owner of the meal'
+							)
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-302-4 Meal does not exist', (done) => {
+				chai.request(server)
+					.put('/api/meal/999')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						name: 'Eten',
+						description: 'Een heel groot bord eten',
+						isActive: 1,
+						isVega: 0,
+						isVegan: 0,
+						isToTakeHome: 1,
+						dateTime: '2022-05-20T12:10:15.000Z',
+						imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
+						allergenes: ['noten'],
+						maxAmountOfParticipants: 1,
+						price: 5.50,
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('Meal with ID 999 not found')
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-302-5 Meal updated succesfully', (done) => {
+				chai.request(server)
+					.put('/api/meal/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.send({
+						name: 'Eten',
+						description: 'Een heel groot bord eten',
+						isActive: 1,
+						isVega: 0,
+						isVegan: 0,
+						isToTakeHome: 1,
+						dateTime: '2022-05-20T12:10:15.000Z',
+						imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
+						allergenes: ['noten'],
+						maxAmountOfParticipants: 1,
+						price: 5.50,
+					})
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							allergenes: 'noten',
+							cookId: 1,
+							createDate: result.createDate,
+							dateTime: result.dateTime,
+							description: 'Een heel groot bord eten',
+							id: 1,
+							imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
+							isActive: true,
+							isToTakeHome: true,
+							isVega: false,
+							isVegan: false,
+							maxAmountOfParticipants: 1,
+							name: 'Eten',
+							price: 5.50,
+							updateDate: result.updateDate,
+						})
+						done()
+					})
+			})
 		})
 	})
 
@@ -368,16 +383,19 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-303-1 Get List of meals', (done) => {
-			chai.request(server)
-				.get('/api/meal')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					result.should.be.an('array').that.lengthOf(1)
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-303-1 Get List of meals', (done) => {
+				chai.request(server)
+					.get('/api/meal')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						result.should.be.an('array').that.lengthOf(1)
+						done()
+					})
+			})
 		})
 	})
 
