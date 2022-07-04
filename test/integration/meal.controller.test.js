@@ -91,7 +91,8 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-301-2 Not logged in', (done) => {
+		beforeEach((done) => {
+			it('TC-301-2 Not logged in', (done) => {
 			chai.request(server)
 				.post('/api/meal')
 				.send({
@@ -110,9 +111,11 @@ describe('CRUD Meals /api/meal', () => {
 						.that.equals('Authorization header missing!')
 					done()
 				})
+			})
 		})
-
-		it('TC-301-3 Meal added succesfully', (done) => {
+		
+		beforeEach((done) => {
+			it('TC-301-3 Meal added succesfully', (done) => {
 			chai.request(server)
 				.post('/api/meal')
 				.set(
@@ -159,6 +162,7 @@ describe('CRUD Meals /api/meal', () => {
 					})
 					done()
 				})
+			})
 		})
 	})
 
