@@ -426,46 +426,52 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-304-1 Meal does not exist', (done) => {
-			chai.request(server)
-				.get('/api/meal/2')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('Meal with id: 2 not found!')
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-304-1 Meal does not exist', (done) => {
+				chai.request(server)
+					.get('/api/meal/2')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('Meal with id: 2 not found!')
+						done()
+					})
+			})
 		})
 
-		it('TC-304-2 Successfull meal detail', (done) => {
-			chai.request(server)
-				.get('/api/meal/1')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						allergenes: '',
-						cookId: 1,
-						createDate: result.createDate,
-						dateTime: result.dateTime,
-						description: 'Italiaanse hap van deegslierten en saus!',
-						id: 1,
-						imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
-						isActive: 1,
-						isToTakeHome: 1,
-						isVega: 1,
-						isVegan: 1,
-						maxAmountOfParticipants: 4,
-						name: 'Spaghetti Bolognese',
-						price: '5.50',
-						updateDate: result.updateDate,
+		
+		beforeEach((done) => {
+			it('TC-304-2 Successfull meal detail', (done) => {
+				chai.request(server)
+					.get('/api/meal/1')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							allergenes: '',
+							cookId: 1,
+							createDate: result.createDate,
+							dateTime: result.dateTime,
+							description: 'Italiaanse hap van deegslierten en saus!',
+							id: 1,
+							imageUrl: 'https://t.eu1.jwwb.nl/W682407/UYP7o9fm_Y55dSlUgrI0xDdGPu8=/0x160:1600x903/1200x557/f.eu1.jwwb.nl%2Fpublic%2Fy%2Fe%2Fp%2Ftemp-oiepihihappqmxrjsyvg%2F0w7c8x%2Fspagetti-1.jpg',
+							isActive: 1,
+							isToTakeHome: 1,
+							isVega: 1,
+							isVegan: 1,
+							maxAmountOfParticipants: 4,
+							name: 'Spaghetti Bolognese',
+							price: '5.50',
+							updateDate: result.updateDate,
+						})
+						done()
 					})
-					done()
-				})
+			})
 		})
 	})
 
@@ -496,74 +502,86 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-305-2 Not logged in', (done) => {
-			chai.request(server)
-				.delete('/api/meal/1')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be
-						.a('string')
-						.that.equals('Authorization header missing!')
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-305-2 Not logged in', (done) => {
+				chai.request(server)
+					.delete('/api/meal/1')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be
+							.a('string')
+							.that.equals('Authorization header missing!')
+						done()
+					})
+			})
 		})
 
-		it('TC-305-3 Not the meal owner', (done) => {
-			chai.request(server)
-				.delete('/api/meal/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(403)
-					message.should.be
-						.a('string')
-						.that.equals(
-							'User is not the owner of the meal'
-						)
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-305-3 Not the meal owner', (done) => {
+				chai.request(server)
+					.delete('/api/meal/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(403)
+						message.should.be
+							.a('string')
+							.that.equals(
+								'User is not the owner of the meal'
+							)
+						done()
+					})
+			})
 		})
 
-		it('TC-305-4 Meal does not exist', (done) => {
-			chai.request(server)
-				.delete('/api/meal/999')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('Meal not found!')
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-305-4 Meal does not exist', (done) => {
+				chai.request(server)
+					.delete('/api/meal/999')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('Meal not found!')
+						done()
+					})
+			})
 		})
 
-		it('TC-305-5 Meal deleted succesfully', (done) => {
-			chai.request(server)
-				.delete('/api/meal/1')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(200)
-					message.should.be
-						.a('string')
-						.that.equals('Meal deleted successfully')
-					done()
-				})
+		
+		beforeEach((done) => {
+			it('TC-305-5 Meal deleted succesfully', (done) => {
+				chai.request(server)
+					.delete('/api/meal/1')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(200)
+						message.should.be
+							.a('string')
+							.that.equals('Meal deleted successfully')
+						done()
+					})
+			})
 		})
 	})
 
@@ -594,55 +612,64 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-401-1 Not logged in', (done) => {
-			chai.request(server)
-				.get('/api/meal/1/participate')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be
-						.a('string')
-						.that.equals('Authorization header missing!')
-					done()
-				})
-		})
-
-		it('TC-401-2 Meal does not exist', (done) => {
-			chai.request(server)
-				.get('/api/meal/99/participate')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('Meal does not exist!')
-					done()
-				})
-		})
-
-		it('TC-401-2 participation successfull', (done) => {
-			chai.request(server)
-				.get('/api/meal/1/participate')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						currentAmountOfParticipants: 1,
-						currentlyParticipating: true,
+		
+		beforeEach((done) => {
+			it('TC-401-1 Not logged in', (done) => {
+				chai.request(server)
+					.get('/api/meal/1/participate')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be
+							.a('string')
+							.that.equals('Authorization header missing!')
+						done()
 					})
-					done()
-				})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-401-2 Meal does not exist', (done) => {
+				chai.request(server)
+					.get('/api/meal/99/participate')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('Meal does not exist!')
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-401-2 participation successfull', (done) => {
+				chai.request(server)
+					.get('/api/meal/1/participate')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							currentAmountOfParticipants: 1,
+							currentlyParticipating: true,
+						})
+						done()
+					})
+			})
 		})
 	})
 
@@ -679,55 +706,64 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-402-1 Not logged in', (done) => {
-			chai.request(server)
-				.get('/api/meal/1/participate')
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(401)
-					message.should.be
-						.a('string')
-						.that.equals('Authorization header missing!')
-					done()
-				})
-		})
-
-		it('TC-402-2 Meal does not exist', (done) => {
-			chai.request(server)
-				.get('/api/meal/99/participate')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, message } = res.body
-					status.should.equals(404)
-					message.should.be
-						.a('string')
-						.that.equals('Meal does not exist!')
-					done()
-				})
-		})
-
-		it('TC-402-3 Unparticipation successfull', (done) => {
-			chai.request(server)
-				.get('/api/meal/1/participate')
-				.set(
-					'authorization',
-					'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
-				)
-				.end((err, res) => {
-					res.should.be.an('object')
-					let { status, result } = res.body
-					status.should.equals(200)
-					assert.deepEqual(result, {
-						currentAmountOfParticipants: 1,
-						currentlyParticipating: false,
+		
+		beforeEach((done) => {
+			it('TC-402-1 Not logged in', (done) => {
+				chai.request(server)
+					.get('/api/meal/1/participate')
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(401)
+						message.should.be
+							.a('string')
+							.that.equals('Authorization header missing!')
+						done()
 					})
-					done()
-				})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-402-2 Meal does not exist', (done) => {
+				chai.request(server)
+					.get('/api/meal/99/participate')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, message } = res.body
+						status.should.equals(404)
+						message.should.be
+							.a('string')
+							.that.equals('Meal does not exist!')
+						done()
+					})
+			})
+		})
+
+		
+		beforeEach((done) => {
+			it('TC-402-3 Unparticipation successfull', (done) => {
+				chai.request(server)
+					.get('/api/meal/1/participate')
+					.set(
+						'authorization',
+						'Bearer ' + jwt.sign({ userId: 1 }, jwtSecretKey)
+					)
+					.end((err, res) => {
+						res.should.be.an('object')
+						let { status, result } = res.body
+						status.should.equals(200)
+						assert.deepEqual(result, {
+							currentAmountOfParticipants: 1,
+							currentlyParticipating: false,
+						})
+						done()
+					})
+			})
 		})
 	})
 })
