@@ -63,7 +63,9 @@ describe('CRUD Meals /api/meal', () => {
 			})
 		})
 
-		it('TC-301-1 Required field missing', (done) => {
+		
+		beforeEach((done) => {
+			it('TC-301-1 Required field missing', (done) => {
 			chai.request(server)
 				.post('/api/meal')
 				.set(
@@ -86,6 +88,7 @@ describe('CRUD Meals /api/meal', () => {
 						.that.equals('Description must be a string!')
 					done()
 				})
+			})
 		})
 
 		it('TC-301-2 Not logged in', (done) => {
