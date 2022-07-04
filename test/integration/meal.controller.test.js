@@ -36,8 +36,8 @@ const INSERT_MEAL2 = `INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeH
 const INSERT_PARTICIPATION = `INSERT INTO meal_participants_user (mealId, userId) VALUES (1,1)`
 
 describe('CRUD Meals /api/meal', () => {
-	beforeEach((done) => {
-		describe('UC-301 Register Meal', () => {
+	describe('UC-301 Register Meal', () => {
+		beforeEach((done) => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -334,8 +334,8 @@ describe('CRUD Meals /api/meal', () => {
 		})
 	})
 
-	beforeEach((done) => {
-		describe('UC-303 Request List of meals', () => {
+	describe('UC-303 Request List of meals', () => {
+		beforeEach((done) => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -374,8 +374,8 @@ describe('CRUD Meals /api/meal', () => {
 		})
 	})
 
-	beforeEach((done) => {
-		describe('UC-304 Request Meal Details', () => {
+	describe('UC-304 Request Meal Details', () => {
+		beforeEach((done) => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -542,8 +542,8 @@ describe('CRUD Meals /api/meal', () => {
 		})
 	})
 
-	beforeEach((done) => {
-		describe('UC-401 Participate in meal', () => {
+	describe('UC-401 Participate in meal', () => {
+		beforeEach((done) => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
@@ -621,8 +621,8 @@ describe('CRUD Meals /api/meal', () => {
 		})
 	})
 
-	beforeEach((done) => {
-		describe('UC-402 Unparticipate in meal', () => {
+	describe('UC-402 Unparticipate in meal', () => {
+		beforeEach((done) => {
 			logger.debug('beforeEach called')
 			dbconnection.getConnection(function (err, connection) {
 				if (err) throw err
